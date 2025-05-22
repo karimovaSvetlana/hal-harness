@@ -63,7 +63,7 @@ def run(input: dict[str, dict], **kwargs) -> dict[str, str]:
         api_key = os.getenv("TOGETHERAI_API_KEY")
         llm = ChatTogether(model=kwargs['model_name'], api_key=api_key)
         planner_llm = ChatTogether(model=kwargs['model_name'], api_key=api_key)
-    elif 'gigachat' in kwargs['model_name']:
+    elif 'gigachat' in kwargs['model_name'].lower():
         api_key = os.getenv("GIGACHAT_API_KEY")
         llm = gigachat.GigaChat(base_url=base_url,
             credentials=os.environ.get("GIGACHAT_CREDENTIALS", None),
