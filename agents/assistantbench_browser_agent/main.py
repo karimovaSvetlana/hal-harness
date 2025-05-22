@@ -1,14 +1,22 @@
 # This is an example agent that uses smolagents to generate answers for the AssistantBench benchmark.
-from langchain_openai import ChatOpenAI
-from langchain_anthropic import ChatAnthropic
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_together import ChatTogether
-from browser_use import Agent, Browser, BrowserConfig
+try:
+    from langchain_openai import ChatOpenAI
+    from langchain_anthropic import ChatAnthropic
+    from langchain_google_genai import ChatGoogleGenerativeAI
+    from langchain_together import ChatTogether
+    from browser_use import Agent, Browser, BrowserConfig
+except ImportError:
+    print("langchain_openai, langchain_anthropic, langchain_google_genai, langchain_together are not installed")
 import asyncio
 import os
-
+import gigachat
 import warnings
 from pydantic import PydanticDeprecatedSince20
+
+
+base_url = "https://gigachat.ift.sberdevices.ru/v1"
+scope = "GIGACHAT_API_CORP"
+
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
@@ -55,6 +63,15 @@ def run(input: dict[str, dict], **kwargs) -> dict[str, str]:
         api_key = os.getenv("TOGETHERAI_API_KEY")
         llm = ChatTogether(model=kwargs['model_name'], api_key=api_key)
         planner_llm = ChatTogether(model=kwargs['model_name'], api_key=api_key)
+    elif 'gigachat' in kwargs['model_name']:
+        api_key = os.getenv("GIGACHAT_API_KEY")
+        llm = gigachat.GigaChat(base_url=base_url,
+            credentials=os.environ.get("GIGACHAT_CREDENTIALS", None),
+            access_token=os.environ.get("GIGACHAT_TOKEN", None),
+            scope=os.environ.get("GIGACHAT_SCOPE", scope),
+            verify_ssl_certs=False,
+            timeout=200,
+        )
     else:
         raise ValueError(f"Unrecognized model_name: {kwargs['model_name']}")
 

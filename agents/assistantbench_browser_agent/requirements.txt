@@ -2,3 +2,4 @@ weave
 browser_use
 asynchio
 langchain
+gigachat

@@ -88,6 +88,7 @@ MODEL_PRICES_DICT = {
                 "gemini/gemini-2.5-pro-preview-03-25": {"prompt_tokens": 1.25/1e6, "completion_tokens": 10/1e6},
                 "gemini-2.5-pro-preview-03-25": {"prompt_tokens": 1.25/1e6, "completion_tokens": 10/1e6},
                 "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8": {"prompt_tokens": 0.27/1e6, "completion_tokens": 0.85/1e6},
+                "GigaChat:2.0.27.04": {"prompt_tokens": 0, "completion_tokens": 0},
 }
 
 def fetch_weave_calls(client) -> List[Dict[str, Any]]:
