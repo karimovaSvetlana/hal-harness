@@ -4,9 +4,9 @@ try:
     from langchain_anthropic import ChatAnthropic
     from langchain_google_genai import ChatGoogleGenerativeAI
     from langchain_together import ChatTogether
-    from browser_use import Agent, Browser, BrowserConfig
 except ImportError:
     print("langchain_openai, langchain_anthropic, langchain_google_genai, langchain_together are not installed")
+from browser_use import Agent, Browser, BrowserConfig
 import asyncio
 import os
 import gigachat
