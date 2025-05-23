@@ -3,3 +3,4 @@ browser_use
 asynchio
 langchain
 gigachat
+langchain_core

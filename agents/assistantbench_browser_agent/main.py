@@ -3,19 +3,22 @@ try:
     from langchain_openai import ChatOpenAI
     from langchain_anthropic import ChatAnthropic
     from langchain_google_genai import ChatGoogleGenerativeAI
-    from langchain_together import ChatTogether
 except ImportError:
-    print("langchain_openai, langchain_anthropic, langchain_google_genai, langchain_together are not installed")
+    print("langchain_openai, langchain_anthropic, langchain_google_genai are not installed")
+from langchain_together import ChatTogether
+from langchain_gigachat.chat_models import GigaChat
 from browser_use import Agent, Browser, BrowserConfig
 import asyncio
 import os
 import gigachat
 import warnings
 from pydantic import PydanticDeprecatedSince20
+from langchain_core.language_models import BaseChatModel
+from langchain_core.messages import HumanMessage, AIMessage
+from langchain_core.outputs import ChatGeneration, ChatResult
 
 
 base_url = "https://gigachat.ift.sberdevices.ru/v1"
-scope = "GIGACHAT_API_CORP"
 
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -64,12 +67,14 @@ def run(input: dict[str, dict], **kwargs) -> dict[str, str]:
         llm = ChatTogether(model=kwargs['model_name'], api_key=api_key)
         planner_llm = ChatTogether(model=kwargs['model_name'], api_key=api_key)
     elif 'gigachat' in kwargs['model_name'].lower():
-        api_key = os.getenv("GIGACHAT_API_KEY")
-        llm = gigachat.GigaChat(base_url=base_url,
+        api_key = os.getenv("GIGACHAT_TOKEN")
+        llm = GigaChat(
+            base_url=base_url,
             credentials=os.environ.get("GIGACHAT_CREDENTIALS", None),
-            access_token=os.environ.get("GIGACHAT_TOKEN", None),
-            scope=os.environ.get("GIGACHAT_SCOPE", scope),
+            access_token=api_key,
+            scope=os.environ.get("GIGACHAT_SCOPE", "GIGACHAT_API_CORP"),
             verify_ssl_certs=False,
+            profanity_check=False,
             timeout=200,
         )
     else:
@@ -82,8 +87,8 @@ def run(input: dict[str, dict], **kwargs) -> dict[str, str]:
 
     async def _main():
         browser = Browser(
-        config=BrowserConfig(headless=True)
-    )
+            config=BrowserConfig(headless=True)
+        )
         agent = Agent(
             task=question,
             message_context="Provide a concise and accurate answer to the question below without any additional context in the format suggested by the prompt. Do not include any justification or any additional unnecessary text. Your answer does not need to be a full sentence. If you are unsure what the final answer is, generate an empty string. The answer should either be: a number, a string, a list of strings, or a list of jsons. The answer should be parsed with the python method: json.loads(input_str). If no answer is found, generate an empty string. If the prompt includes a specified answer format, respect that format.",
