@@ -3,14 +3,13 @@ try:
     from langchain_openai import ChatOpenAI
     from langchain_anthropic import ChatAnthropic
     from langchain_google_genai import ChatGoogleGenerativeAI
+    from langchain_together import ChatTogether
 except ImportError:
     print("langchain_openai, langchain_anthropic, langchain_google_genai are not installed")
-from langchain_together import ChatTogether
 from langchain_gigachat.chat_models import GigaChat
 from browser_use import Agent, Browser, BrowserConfig
 import asyncio
 import os
-import gigachat
 import warnings
 from pydantic import PydanticDeprecatedSince20
 

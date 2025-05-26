@@ -67,7 +67,6 @@ grpcio-status==1.72.0rc1
 gymnasium==1.1.1
 h11==0.16.0
 h2==4.2.0
--e git+https://github.com/karimovaSvetlana/hal-harness.git@ef3f89e0f29815b9e02efa48ccd1e8e3332cee65#egg=hal
 hf-xet==1.1.2
 hpack==4.1.0
 httpcore==1.0.9
