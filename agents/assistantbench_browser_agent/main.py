@@ -76,6 +76,7 @@ def run(input: dict[str, dict], **kwargs) -> dict[str, str]:
             verify_ssl_certs=False,
             profanity_check=False,
             timeout=200,
+            max_tokens=128_000,
         )
     else:
         raise ValueError(f"Unrecognized model_name: {kwargs['model_name']}")
@@ -93,6 +94,7 @@ def run(input: dict[str, dict], **kwargs) -> dict[str, str]:
             task=question,
             message_context="Provide a concise and accurate answer to the question below without any additional context in the format suggested by the prompt. Do not include any justification or any additional unnecessary text. Your answer does not need to be a full sentence. If you are unsure what the final answer is, generate an empty string. The answer should either be: a number, a string, a list of strings, or a list of jsons. The answer should be parsed with the python method: json.loads(input_str). If no answer is found, generate an empty string. If the prompt includes a specified answer format, respect that format.",
             llm=llm,
+            use_vision=False,
             # planner_llm=planner_llm,
             # use_vision_for_planner=False,
             # planner_interval=2,
