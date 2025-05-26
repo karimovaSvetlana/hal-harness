@@ -13,9 +13,6 @@ import os
 import gigachat
 import warnings
 from pydantic import PydanticDeprecatedSince20
-from langchain_core.language_models import BaseChatModel
-from langchain_core.messages import HumanMessage, AIMessage
-from langchain_core.outputs import ChatGeneration, ChatResult
 
 
 base_url = "https://gigachat.ift.sberdevices.ru/v1"
@@ -90,7 +87,7 @@ def run(input: dict[str, dict], **kwargs) -> dict[str, str]:
 
     async def _main():
         browser = Browser(
-            config=BrowserConfig(headless=False)
+            config=BrowserConfig(headless=True)
         )
         agent = Agent(
             task=question,
