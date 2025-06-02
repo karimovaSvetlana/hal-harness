@@ -6,15 +6,59 @@ try:
     from langchain_together import ChatTogether
 except ImportError:
     print("langchain_openai, langchain_anthropic, langchain_google_genai are not installed")
-from langchain_gigachat.chat_models import GigaChat
+from langchain_gigachat.chat_models import GigaChat as GigaChat_langchain
 from browser_use import Agent, Browser, BrowserConfig
 import asyncio
 import os
 import warnings
+import json
+import time
 from pydantic import PydanticDeprecatedSince20
 
 
 base_url = "https://gigachat.ift.sberdevices.ru/v1"
+class GigaChat(GigaChat_langchain):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.base_url = base_url
+
+    # def _is_valid_response(self, response) -> bool:
+    #     if not isinstance(response, str):
+    #         return False
+    #     try:
+    #         json.loads(response)
+    #         return True
+    #     except Exception:
+    #         return False
+    
+    def invoke(self, *args, **kwargs) -> str:
+        i, max_retries = 0, 20
+        while i <= max_retries:
+            try:
+                response = super().invoke(*args, **kwargs)
+                # if self._is_valid_response(response.content):
+                return response
+                # print(f"Invalid response type: {type(response)}, {response}. Retrying...")
+            except Exception as e:
+                print(f"Exception occurred: {type(e)}, {e}")
+            time.sleep(1)
+            i += 1
+        return "I can't answer this question"
+
+    async def ainvoke(self, *args, **kwargs) -> str:
+        i, max_retries = 0, 20
+        while i <= max_retries:
+            try:
+                response = await super().ainvoke(*args, **kwargs)
+                # if self._is_valid_response(response.content):
+                return response
+                # print(f"Invalid response type: {type(response)}, {response}. Retrying...")
+            except Exception as e:
+                print(f"Exception occurred: {type(e)}, {e}")
+            time.sleep(1)
+            i += 1
+        return "I can't answer this question"
+            
 
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -65,6 +109,7 @@ def run(input: dict[str, dict], **kwargs) -> dict[str, str]:
     elif 'gigachat' in kwargs['model_name'].lower():
         api_key = os.getenv("GIGACHAT_TOKEN")
         kwargs_giga = dict(
+            model=kwargs['model_name'],
             base_url=base_url,
             credentials=os.environ.get("GIGACHAT_CREDENTIALS", None),
             access_token=api_key,
