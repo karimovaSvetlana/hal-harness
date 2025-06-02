@@ -21,24 +21,13 @@ class GigaChat(GigaChat_langchain):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.base_url = base_url
-
-    # def _is_valid_response(self, response) -> bool:
-    #     if not isinstance(response, str):
-    #         return False
-    #     try:
-    #         json.loads(response)
-    #         return True
-    #     except Exception:
-    #         return False
     
     def invoke(self, *args, **kwargs) -> str:
         i, max_retries = 0, 20
         while i <= max_retries:
             try:
                 response = super().invoke(*args, **kwargs)
-                # if self._is_valid_response(response.content):
                 return response
-                # print(f"Invalid response type: {type(response)}, {response}. Retrying...")
             except Exception as e:
                 print(f"Exception occurred: {type(e)}, {e}")
             time.sleep(1)
@@ -50,9 +39,7 @@ class GigaChat(GigaChat_langchain):
         while i <= max_retries:
             try:
                 response = await super().ainvoke(*args, **kwargs)
-                # if self._is_valid_response(response.content):
                 return response
-                # print(f"Invalid response type: {type(response)}, {response}. Retrying...")
             except Exception as e:
                 print(f"Exception occurred: {type(e)}, {e}")
             time.sleep(1)
