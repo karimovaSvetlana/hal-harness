@@ -33,6 +33,10 @@ from datetime import datetime
 from pathlib import Path
 import sys
 
+# TODO_исполним файл, чтобы в litellm зарегалась модель. (надо для swe-агента)
+sys.path.append(str(Path(".").absolute()))
+from gigachat_model import *
+
 load_dotenv()
 
 
