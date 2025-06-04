@@ -47,7 +47,7 @@ class SWEBenchBenchmark(BaseBenchmark):
     def evaluate_output(self, agent_output: Dict[str, Any], run_id: str) -> Dict[str, Any]:
         """Evaluate SWEBench submissions"""
         run_dir = self.get_run_dir(run_id)
-        
+
         results = []
         for task_id, result in agent_output.items():
             results.append({
@@ -55,14 +55,13 @@ class SWEBenchBenchmark(BaseBenchmark):
                 'model_patch': result,
                 'model_name_or_path': self.benchmark_name
             })
-        
+
         # Save submissions to file
         submissions_path = os.path.join(run_dir, f"{run_id}_SWE_BENCH_SUBMISSIONS.jsonl")
         with open(submissions_path, 'w') as f:
             for result in results:
                 json.dump(result, f)
                 f.write('\n')
-        
         
         command = ['conda', 'run', '-n', 'swebench_hal', 'python', '-m', 'swebench.harness.run_evaluation',
            '--dataset_name', 'princeton-nlp/SWE-bench_Verified',
