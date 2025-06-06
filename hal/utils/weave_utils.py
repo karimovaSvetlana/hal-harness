@@ -88,8 +88,8 @@ MODEL_PRICES_DICT = {
                 "gemini/gemini-2.5-pro-preview-03-25": {"prompt_tokens": 1.25/1e6, "completion_tokens": 10/1e6},
                 "gemini-2.5-pro-preview-03-25": {"prompt_tokens": 1.25/1e6, "completion_tokens": 10/1e6},
                 "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8": {"prompt_tokens": 0.27/1e6, "completion_tokens": 0.85/1e6},
-                "GigaChat:2.0.27.04": {"prompt_tokens": 0, "completion_tokens": 0},
-                "GigaChat:2.0.28.02": {"prompt_tokens": 0, "completion_tokens": 0},
+                "gigachat/GigaChat:2.0.27.04": {"prompt_tokens": 0, "completion_tokens": 0},
+                "gigachat/GigaChat:2.0.28.02": {"prompt_tokens": 0, "completion_tokens": 0},
 }
 
 def fetch_weave_calls(client) -> List[Dict[str, Any]]:
@@ -99,7 +99,6 @@ def fetch_weave_calls(client) -> List[Dict[str, Any]]:
         "filter": {"trace_roots_only": False},
         "sort_by": [{"field":"started_at","direction":"desc"}],
     }))
-    
     return calls
 
 def get_call_ids(task_id, client):
@@ -261,9 +260,8 @@ def get_weave_calls(client) -> Tuple[List[Dict[str, Any]], str, str]:
         
         # Processed calls
         processed_calls = []
-        
         for call in calls:
-            task_id = call.attributes['weave_task_id']
+            task_id = call.attributes.get('weave_task_id')
             processed_call = process_weave_output(call)
             if processed_call:
                 processed_calls.append(processed_call)
