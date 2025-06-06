@@ -3,6 +3,8 @@ logs/**
 .env
 .eggs/**
 **/__pycache__/**
+__pycache__
+.DS_Store
 results/**
 hal.egg-info/**
 agents/Moatless/evaluations/**
