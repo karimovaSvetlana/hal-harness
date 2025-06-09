@@ -88,6 +88,7 @@ MODEL_PRICES_DICT = {
                 "gemini/gemini-2.5-pro-preview-03-25": {"prompt_tokens": 1.25/1e6, "completion_tokens": 10/1e6},
                 "gemini-2.5-pro-preview-03-25": {"prompt_tokens": 1.25/1e6, "completion_tokens": 10/1e6},
                 "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8": {"prompt_tokens": 0.27/1e6, "completion_tokens": 0.85/1e6},
+                "GigaChat:2.0.28.02": {"prompt_tokens": 0.0, "completion_tokens": 0.0},
 }
 
 def fetch_weave_calls(client) -> List[Dict[str, Any]]:
@@ -260,12 +261,17 @@ def get_weave_calls(client) -> Tuple[List[Dict[str, Any]], str, str]:
         # Processed calls
         processed_calls = []
         
-        for call in calls:
-            task_id = call.attributes['weave_task_id']
+        skipped_calls = []
+        for i, call in enumerate(calls):
+            print(i)
+            if "weave_task_id" not in call.attributes:
+                print(f"||| Пропускаю: {i}/{len(calls)}\n\nПропущено уже {len(skipped_calls)}\n\n{call}")
+                skipped_calls.append(call)
+                continue
             processed_call = process_weave_output(call)
             if processed_call:
                 processed_calls.append(processed_call)
-                
+                task_id = call.attributes['weave_task_id']
                 if task_id not in latency_dict:
                     latency_dict[task_id] = {'first_call_timestamp': processed_call['started_at'], 'last_call_timestamp': processed_call['started_at']}
                 else:
@@ -273,9 +279,9 @@ def get_weave_calls(client) -> Tuple[List[Dict[str, Any]], str, str]:
                         latency_dict[task_id]['first_call_timestamp'] = processed_call['started_at']
                     if processed_call['started_at'] > latency_dict[task_id]['last_call_timestamp']:
                         latency_dict[task_id]['last_call_timestamp'] = processed_call['started_at']
-                    
+
             progress.update(task1, advance=1)
-            
+
     for task_id in latency_dict:
         latency_dict[task_id]['total_time'] = (datetime.fromisoformat(latency_dict[task_id]['last_call_timestamp']) - datetime.fromisoformat(latency_dict[task_id]['first_call_timestamp'])).total_seconds()
     
