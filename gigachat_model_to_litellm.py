@@ -86,7 +86,7 @@ class GigaChatCustomLLM(CustomLLM):
             model=self.model_name,
             base_url=base_url,
             credentials=os.environ.get("GIGACHAT_CREDENTIALS", None),
-            access_token=os.getenv("GIGACHAT_TOKEN"),
+            access_token="eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4R0NNIiwidHlwIjoiSldUIn0..6dYlsXHw3xm43TDF.Orn5OV6fpd45Qaf7fj5s8UebkuaveJw1W3IS3NFgGkYTzMfBTSqdqSNLLKdYzrkZtgCLv7-arZjnY7g.T_p0mh3IBf2vlyV-jeZWiw", #os.getenv("GIGACHAT_TOKEN"),
             scope=os.environ.get("GIGACHAT_SCOPE", "GIGACHAT_API_CORP"),
             verify_ssl_certs=False,
             profanity_check=False,
