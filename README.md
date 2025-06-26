@@ -1,3 +1,46 @@
+# Инфо
+
+Запуск SWE-bench:
+1. Входим на сервер:
+```bash
+# входим на сервер под пользователем sveta
+ssh sveta@212.34.146.181
+# вводим пароль hADzp&@%Gxk3wAhn9s##Jx3afMjvPP#$&^8@!bmWV#mc(quFk#!3Hu%4Xw8gMQC#
+# входим на пользователя root
+su root
+# вводим пароль NLJ31q6KdcH4ecu4
+```
+2. Далее устанавливаем все что нужно:
+```bash
+# переходим в нужную директорию:
+cd /home/sveta/hal-harness
+
+# очищаем все автоматически активированные кондой окружения (base)
+conda deactivate
+conda deactivate
+conda deactivate
+# на всякий случай очищаем созданное скриптом ранее окружение
+conda remove -n swebench_hal --all
+# активируем уже имеющееся окружение
+conda activate hal
+```
+3. Далее сетапим гигу. В файле `gigachat_model_to_litellm.py` прописываем 
+
+```bash
+hal-eval --benchmark swebench_verified_mini \
+  --agent_dir agents/SWE-agent-v1.0/ \
+  --agent_function main.run \
+  --agent_name "SWEBench Agent (GigaChat:2.0.28.02)" \
+  -A agent.model.name=gigachat/GigaChat:2.0.28.02 \
+  -A agent.model.per_instance_cost_limit=0.0 \
+  -A agent.model.temperature=1.0 \
+  -A agent.model.top_p=0.0 \
+  --max_concurrent 1 \
+  --max_tasks 1
+```
+- Результаты появятся в директории `results`, в папке с названием по типу: `swebench_verified_mini_swebench_agent_gigachat202802_1750967910`, сами финальные результаты прогона можно посмотреть в json с названием `*_UPLOAD.json` (напр., `swebench_verified_mini_swebench_agent_gigachat202802_1749540956_UPLOAD.json`), там основные метрики находятся в ключе `raw_eval_results`
+
+*Ниже информация для разработчиков:*
 # HAL: The Holistic Agent Leaderboard
 
 [![HAL Leaderboards](https://img.shields.io/badge/Leaderboards-HAL-blue)](https://hal.cs.princeton.edu/)

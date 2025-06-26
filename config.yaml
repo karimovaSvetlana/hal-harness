@@ -1,0 +1,16 @@
+model:
+  api:
+    token: ...
+    url: https://gigachat.ift.sberdevices.ru/v1
+  name: GigaChat-2-Max
+  parameters:
+    max_tokens: 64000
+    temperature: 1.0
+    top_p: 0.0
+    # максимальное кол-во попыток при ошибке API
+    max_retries: 10
+    # пауза (в сек) между повторным запросом при ошибке
+    time_sleep: 10
+    # кол-во времени ожидание ответа от API
+    timeout: 600
+    scope: "GIGACHAT_API_CORP"
