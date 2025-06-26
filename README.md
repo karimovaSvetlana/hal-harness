@@ -5,10 +5,10 @@
 ```bash
 # входим на сервер под пользователем sveta
 ssh sveta@212.34.146.181
-# вводим пароль hADzp&@%Gxk3wAhn9s##Jx3afMjvPP#$&^8@!bmWV#mc(quFk#!3Hu%4Xw8gMQC#
+# вводим пароль от пользователя sveta
 # входим на пользователя root
 su root
-# вводим пароль NLJ31q6KdcH4ecu4
+# вводим пароль от пользователя root
 ```
 2. Далее устанавливаем все что нужно:
 ```bash
@@ -23,6 +23,11 @@ conda deactivate
 conda remove -n swebench_hal --all
 # активируем уже имеющееся окружение
 conda activate hal
+```
+Также сетапим .env-файл, там должны быть ключи от hugging-face и wandb:
+```
+WANDB_API_KEY=
+HF_TOKEN=
 ```
 3. Далее сетапим гигу. В файле `gigachat_model_to_litellm.py` прописываем 
 
